@@ -13,6 +13,11 @@
 		04B9A99915E3BCC600AC6E40 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 04B9A99715E3BCC600AC6E40 /* Credits.rtf */; };
 		04B9A99C15E3BCC600AC6E40 /* JKSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B9A99B15E3BCC600AC6E40 /* JKSAppDelegate.m */; };
 		04B9A99F15E3BCC600AC6E40 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04B9A99D15E3BCC600AC6E40 /* MainMenu.xib */; };
+		04B9A9A615E3BCD200AC6E40 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B9A9A515E3BCD200AC6E40 /* QuartzCore.framework */; };
+		04B9A9A815E3BCDE00AC6E40 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B9A9A715E3BCDE00AC6E40 /* AVFoundation.framework */; };
+		04B9A9AC15E3BE4F00AC6E40 /* JKSMoviePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B9A9AB15E3BE4F00AC6E40 /* JKSMoviePlayerController.m */; };
+		04B9A9AF15E4C46F00AC6E40 /* JKSMoviePlayerControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B9A9AE15E4C46F00AC6E40 /* JKSMoviePlayerControllerView.m */; };
+		04B9A9B115E4CCE900AC6E40 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B9A9B015E4CCE900AC6E40 /* CoreMedia.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +34,13 @@
 		04B9A99A15E3BCC600AC6E40 /* JKSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKSAppDelegate.h; sourceTree = "<group>"; };
 		04B9A99B15E3BCC600AC6E40 /* JKSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKSAppDelegate.m; sourceTree = "<group>"; };
 		04B9A99E15E3BCC600AC6E40 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		04B9A9A515E3BCD200AC6E40 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		04B9A9A715E3BCDE00AC6E40 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		04B9A9AA15E3BE4F00AC6E40 /* JKSMoviePlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKSMoviePlayerController.h; sourceTree = "<group>"; };
+		04B9A9AB15E3BE4F00AC6E40 /* JKSMoviePlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKSMoviePlayerController.m; sourceTree = "<group>"; };
+		04B9A9AD15E4C46F00AC6E40 /* JKSMoviePlayerControllerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKSMoviePlayerControllerView.h; sourceTree = "<group>"; };
+		04B9A9AE15E4C46F00AC6E40 /* JKSMoviePlayerControllerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKSMoviePlayerControllerView.m; sourceTree = "<group>"; };
+		04B9A9B015E4CCE900AC6E40 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +48,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B9A9B115E4CCE900AC6E40 /* CoreMedia.framework in Frameworks */,
+				04B9A9A815E3BCDE00AC6E40 /* AVFoundation.framework in Frameworks */,
+				04B9A9A615E3BCD200AC6E40 /* QuartzCore.framework in Frameworks */,
 				04B9A98915E3BCC600AC6E40 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -46,6 +61,9 @@
 		04B9A97915E3BCC600AC6E40 = {
 			isa = PBXGroup;
 			children = (
+				04B9A9B015E4CCE900AC6E40 /* CoreMedia.framework */,
+				04B9A9A715E3BCDE00AC6E40 /* AVFoundation.framework */,
+				04B9A9A515E3BCD200AC6E40 /* QuartzCore.framework */,
 				04B9A98E15E3BCC600AC6E40 /* JKSMoviePlayer */,
 				04B9A98715E3BCC600AC6E40 /* Frameworks */,
 				04B9A98515E3BCC600AC6E40 /* Products */,
@@ -82,6 +100,7 @@
 		04B9A98E15E3BCC600AC6E40 /* JKSMoviePlayer */ = {
 			isa = PBXGroup;
 			children = (
+				04B9A9A915E3BE2C00AC6E40 /* Classes */,
 				04B9A99A15E3BCC600AC6E40 /* JKSAppDelegate.h */,
 				04B9A99B15E3BCC600AC6E40 /* JKSAppDelegate.m */,
 				04B9A99D15E3BCC600AC6E40 /* MainMenu.xib */,
@@ -100,6 +119,17 @@
 				04B9A99715E3BCC600AC6E40 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		04B9A9A915E3BE2C00AC6E40 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				04B9A9AA15E3BE4F00AC6E40 /* JKSMoviePlayerController.h */,
+				04B9A9AB15E3BE4F00AC6E40 /* JKSMoviePlayerController.m */,
+				04B9A9AD15E4C46F00AC6E40 /* JKSMoviePlayerControllerView.h */,
+				04B9A9AE15E4C46F00AC6E40 /* JKSMoviePlayerControllerView.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,6 +199,8 @@
 			files = (
 				04B9A99515E3BCC600AC6E40 /* main.m in Sources */,
 				04B9A99C15E3BCC600AC6E40 /* JKSAppDelegate.m in Sources */,
+				04B9A9AC15E3BE4F00AC6E40 /* JKSMoviePlayerController.m in Sources */,
+				04B9A9AF15E4C46F00AC6E40 /* JKSMoviePlayerControllerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,5 +11,7 @@
 @interface JKSAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSView *movieContainerView;
 
+- (IBAction)selectMoviePressed:(id)sender;
 @end
