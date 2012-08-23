@@ -22,10 +22,12 @@ QTKit and its QTMovieView is the de facto way of adding video playback to Cocoa 
 Things to do
 ----
 
-* A nicer playback controller view, with rewind/fast-forward and volume controls. Should probably look even more like the one on Quicktime X so users will recognize it quicker
-* JKSMoviePlayerController should expose more controller functionality (start/stop playback programmatically etc)
-* Hook up the controls in the controller view to the responder chain
-* Build it as a `.framework`
+* TODO A nicer playback controller view, with rewind/fast-forward and volume controls. Should probably look even more like the one on Quicktime X so users will recognize it quicker
+* TODO JKSMoviePlayerController should expose more controller functionality (start/stop playback programmatically etc)
+* TODO Hook up the controls in the controller view to the responder chain
+* TODO Build it as a `.framework`
+* TODO Expose API for changing the scaling mode of the AVPlayerLayer
+* TODO Less zealous showing and hiding of the controller view when entering/exiting the tracking area
 
 License
 -------
