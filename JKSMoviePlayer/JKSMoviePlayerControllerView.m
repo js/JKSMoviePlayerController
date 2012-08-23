@@ -8,6 +8,10 @@
 
 #import "JKSMoviePlayerControllerView.h"
 
+@interface JKSMoviePlayerControllerView ()
+
+@end
+
 @implementation JKSMoviePlayerControllerView
 
 - (id)initWithFrame:(NSRect)frame
@@ -15,64 +19,88 @@
     if ((self = [super initWithFrame:frame])) {
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setWantsLayer:YES];
+        [self layer].backgroundColor = [[[NSColor blackColor] colorWithAlphaComponent:0.7] CGColor];
+        [self layer].cornerRadius = 8;
 
-        _rewindButton = [self createButtonWithFrame:NSMakeRect(0, 0, 25, 18) image:[self rewindImageWithSize:NSMakeSize(25, 18)]];
-        [self addSubview:_rewindButton];
-
-        _playPauseButton = [self createButtonWithFrame:NSMakeRect(0, 0, 28, 28) image:[self playImageWithSize:NSMakeSize(28, 28)]];
-        [_playPauseButton setAlternateImage:[self playImageWithSize:[_playPauseButton frame].size]];
+        NSRect playPauseRect = NSMakeRect(0, 0, 18, 18);
+        _playPauseButton = [self createButtonWithFrame:playPauseRect image:[self playImageWithSize:playPauseRect.size]];
         [self addSubview:_playPauseButton];
 
-        _fastForwardButton = [self createButtonWithFrame:NSMakeRect(0, 0, 25, 18) image:[self fastForwardImageWithSize:NSMakeSize(25, 18)]];
-        [self addSubview:_fastForwardButton];
+        _timeSlider = [[NSSlider alloc] initWithFrame:NSMakeRect(0, 0, 235, 15)];
+        [_timeSlider setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self addSubview:_timeSlider];
 
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_playPauseButton
+        _timeLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 35, 15)];
+        [_timeLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [_timeLabel setBezeled:NO];
+        [_timeLabel setDrawsBackground:NO];
+        [_timeLabel setEditable:NO];
+        [_timeLabel setSelectable:NO];
+        [_timeLabel setTextColor:[NSColor whiteColor]];
+        [_timeLabel setStringValue:@"--:--"];
+        [self addSubview:_timeLabel];
+
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_timeSlider
                                                          attribute:NSLayoutAttributeCenterX
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:self
                                                          attribute:NSLayoutAttributeCenterX
                                                         multiplier:1.0
                                                           constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_rewindButton
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_timeSlider
                                                          attribute:NSLayoutAttributeCenterY
                                                          relatedBy:NSLayoutRelationEqual
-                                                            toItem:_playPauseButton
+                                                            toItem:self
                                                          attribute:NSLayoutAttributeCenterY
                                                         multiplier:1.0
                                                           constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_fastForwardButton
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_playPauseButton
                                                          attribute:NSLayoutAttributeCenterY
                                                          relatedBy:NSLayoutRelationEqual
-                                                            toItem:_playPauseButton
+                                                            toItem:_timeSlider
                                                          attribute:NSLayoutAttributeCenterY
                                                         multiplier:1.0
                                                           constant:0]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_rewindButton]-[_playPauseButton]-[_fastForwardButton]"
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_timeLabel
+                                                         attribute:NSLayoutAttributeCenterY
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:_timeSlider
+                                                         attribute:NSLayoutAttributeCenterY
+                                                        multiplier:1.0
+                                                          constant:0]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_playPauseButton(==18)]-[_timeSlider]-5-[_timeLabel]"
                                                                      options:0
                                                                      metrics:nil
-                                                                       views:NSDictionaryOfVariableBindings(_rewindButton, _playPauseButton, _fastForwardButton)]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_playPauseButton]"
-                                                                     options:0
-                                                                     metrics:nil
-                                                                       views:NSDictionaryOfVariableBindings(_playPauseButton)]];
+                                                                       views:NSDictionaryOfVariableBindings(_playPauseButton, _timeSlider, _timeLabel)]];
     }
 
     return self;
 }
 
 
-
-
-- (void)drawRect:(NSRect)dirtyRect
+- (void)setPlaying:(BOOL)flag
 {
-    // TODO: draw rounded gradient-y box
-    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:[self bounds] xRadius:8 yRadius:8];
-    [path setLineWidth:1.5];
-    [[NSColor grayColor] setStroke];
-    [[NSColor blackColor]setFill];
-    [path fill];
-    [path stroke];
+    if (flag) {
+        [self.playPauseButton setToolTip:@"Pause"];
+        [self.playPauseButton setImage:[self pauseImageWithSize:[self.playPauseButton frame].size]];
+    } else {
+        [self.playPauseButton setToolTip:@"Play"];
+        [self.playPauseButton setImage:[self playImageWithSize:[self.playPauseButton frame].size]];
+    }
 }
+
+
+//- (void)drawRect:(NSRect)dirtyRect
+//{
+//    [[NSGraphicsContext currentContext] saveGraphicsState];
+//
+//    [[[NSColor blackColor] colorWithAlphaComponent:0.7] setFill];
+//    [[NSGraphicsContext currentContext] setCompositingOperation:NSCompositeSourceOver];
+//    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:[self bounds] xRadius:8 yRadius:8];
+//    [path fill];
+//    
+//    [[NSGraphicsContext currentContext] restoreGraphicsState];
+//}
 
 
 #pragma mark - Private methods

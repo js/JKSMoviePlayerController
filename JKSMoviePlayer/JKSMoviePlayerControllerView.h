@@ -9,9 +9,9 @@
 #import <Cocoa/Cocoa.h>
 
 @interface JKSMoviePlayerControllerView : NSView
-@property (strong, readonly) NSButton *rewindButton;
-@property (strong, readonly) NSButton *playPauseButton;
-@property (strong, readonly) NSButton *fastForwardButton;
-@property (strong, readonly) NSSlider *timeSlider;
-//@property (strong, readonly) NSSlider *volumeSlider;
+@property (strong) NSButton *playPauseButton;
+@property (strong) NSSlider *timeSlider;
+@property (strong) NSTextField *timeLabel;
+
+- (void)setPlaying:(BOOL)flag;
 @end

@@ -81,7 +81,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
             
         }];
         
-        _controllerView = [[JKSMoviePlayerControllerView alloc] initWithFrame:NSMakeRect(0, 0, 440, 60)];
+        _controllerView = [[JKSMoviePlayerControllerView alloc] initWithFrame:NSMakeRect(0, 0, 440, 40)];
         [_view addSubview:_controllerView];
         [_view addConstraint:[NSLayoutConstraint constraintWithItem:_controllerView
                                                           attribute:NSLayoutAttributeCenterX
@@ -94,22 +94,18 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
                                                                       options:0
                                                                       metrics:nil
                                                                         views:NSDictionaryOfVariableBindings(_controllerView)]];
-        [_view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_controllerView(==60)]-40-|"
+        [_view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_controllerView(==40)]-40-|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:NSDictionaryOfVariableBindings(_controllerView)]];
-        
-        [_controllerView.rewindButton setTarget:self];
-        [_controllerView.rewindButton setAction:@selector(rewind:)];
-        [_controllerView.rewindButton setEnabled:NO];
 
         [_controllerView.playPauseButton setTarget:self];
         [_controllerView.playPauseButton setAction:@selector(playPauseToggle:)];
         [_controllerView.playPauseButton setEnabled:NO];
 
-        [_controllerView.fastForwardButton setTarget:self];
-        [_controllerView.fastForwardButton setAction:@selector(fastForward:)];
-        [_controllerView.fastForwardButton setEnabled:NO];
+        [_controllerView.timeSlider setTarget:self];
+        [_controllerView.timeSlider setAction:@selector(scrubberChanged:)];
+        [_controllerView.timeSlider setEnabled:NO];
     }
     return self;
 }
@@ -142,14 +138,18 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 		}
 		
         [_controllerView.playPauseButton setEnabled:enable];
-		[_controllerView.fastForwardButton setEnabled:enable];
-		[_controllerView.rewindButton setEnabled:enable];
+        [_controllerView.timeSlider setEnabled:enable];
+        if (enable) {
+            [_controllerView.timeSlider setMaxValue:[self duration]];
+            [self updateTimeLabel];
+            
+        }
 	} else if (context == JKSMoviePlayerControllerRateContext) {
 		float rate = [[change objectForKey:NSKeyValueChangeNewKey] floatValue];
-		if (rate != 1.f) {
-			[_controllerView.playPauseButton setToolTip:@"Play"];
+		if (rate != 1.0f) {
+            [_controllerView setPlaying:NO];
 		} else {
-			[_controllerView.playPauseButton setToolTip:@"Pause"];
+            [_controllerView setPlaying:YES];
 		}
 	} else if (context == JKSMoviePlayerPlayerLayerReadyForDisplay) {
 		if ([[change objectForKey:NSKeyValueChangeNewKey] boolValue] == YES) {
@@ -165,11 +165,6 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 
 #pragma mark - Control actions
 
-- (void)rewind:(id)sender
-{
-    
-}
-
 
 - (void)playPauseToggle:(id)sender
 {
@@ -183,9 +178,10 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 	}
 }
 
-- (void)fastForward:(id)sender
+
+- (void)scrubberChanged:(NSSlider *)sender
 {
-    
+    [self.player seekToTime:CMTimeMakeWithSeconds([sender doubleValue], NSEC_PER_SEC)];
 }
 
 
@@ -236,11 +232,27 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 	AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:asset];
 	[_player replaceCurrentItemWithPlayerItem:playerItem];
 	
+    __weak JKSMoviePlayerController *weakSelf = self;
 	_timeObserverToken = [_player addPeriodicTimeObserverForInterval:CMTimeMake(1, 10)
                                                                queue:dispatch_get_main_queue()
                                                           usingBlock:^(CMTime time) {
-                                                              //[[self timeSlider] setDoubleValue:CMTimeGetSeconds(time)];
+                                                              [_controllerView.timeSlider setDoubleValue:CMTimeGetSeconds(time)];
+                                                              [weakSelf updateTimeLabel];
                                                           }];
+}
+
+
+- (void)updateTimeLabel
+{
+    if (CMTIME_IS_INVALID([self.player currentTime])) {
+        [self.controllerView.timeLabel setStringValue:@"--:--"];
+    } else {
+        Float64 seconds = CMTimeGetSeconds([self.player currentTime]);
+        NSUInteger minutes = seconds / 60;
+        NSUInteger secondsLeftOver = seconds - (minutes * 60);
+        NSString *timeString = [NSString stringWithFormat:@"%02ld:%02ld", minutes, secondsLeftOver];
+        [self.controllerView.timeLabel setStringValue:timeString];
+    }
 }
 
 
