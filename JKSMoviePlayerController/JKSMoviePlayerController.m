@@ -173,6 +173,30 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 }
 
 
+- (Float64)duration
+{
+	AVPlayerItem *playerItem = [self.player currentItem];
+
+	if ([playerItem status] == AVPlayerItemStatusReadyToPlay) {
+		return CMTimeGetSeconds([[playerItem asset] duration]);
+	} else {
+		return 0.f;
+    }
+}
+
+
+- (Float64)currentTime
+{
+	return CMTimeGetSeconds([self.player currentTime]);
+}
+
+
+- (void)setCurrentTime:(Float64)time
+{
+    [self.player seekToTime:CMTimeMakeWithSeconds(time, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+}
+
+
 - (void)play
 {
     [self.player play];
@@ -205,7 +229,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 - (void)playPauseToggle:(id)sender
 {
 	if ([self.player rate] != 1.f) {
-		if (self.currentTime == self.duration) {
+		if (self.currentTime >= self.duration) {
             self.currentTime = 0.0f;
         }
 		[self.player play];
@@ -323,23 +347,6 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
         NSLog(@"%@: %@", NSStringFromSelector(_cmd), error);
         // TODO: Notify delegate
 	}
-}
-
-
-- (Float64)duration
-{
-	AVPlayerItem *playerItem = [self.player currentItem];
-	
-	if ([playerItem status] == AVPlayerItemStatusReadyToPlay) {
-		return CMTimeGetSeconds([[playerItem asset] duration]);
-	} else {
-		return 0.f;
-    }
-}
-
-- (Float64)currentTime
-{
-	return CMTimeGetSeconds([self.player currentTime]);
 }
 
 @end
