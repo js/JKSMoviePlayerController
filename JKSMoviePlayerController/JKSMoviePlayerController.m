@@ -326,7 +326,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 }
 
 
-- (double)duration
+- (Float64)duration
 {
 	AVPlayerItem *playerItem = [self.player currentItem];
 	
@@ -337,7 +337,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
     }
 }
 
-- (double)currentTime
+- (Float64)currentTime
 {
 	return CMTimeGetSeconds([self.player currentTime]);
 }

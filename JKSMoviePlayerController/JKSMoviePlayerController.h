@@ -12,8 +12,8 @@
 @property (copy, readonly) NSURL *contentURL;
 @property (strong, readonly) NSView *view;
 
-@property (nonatomic, readonly) double duration;
-@property (nonatomic, assign) double currentTime;
+@property (nonatomic, readonly) Float64 duration;
+@property (nonatomic, assign) Float64 currentTime;
 
 - (instancetype)initWithContentURL:(NSURL *)fileURL;
 
