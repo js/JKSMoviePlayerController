@@ -8,9 +8,30 @@
 
 #import "JKSMoviePlayerControllerView.h"
 
-@interface JKSMoviePlayerControllerView ()
-
+@interface JKSMoviePlayerSliderCell : NSSliderCell
 @end
+
+@implementation JKSMoviePlayerSliderCell
+// TODO:
+//- (void)drawKnob:(NSRect)knobRect
+//{
+//    
+//}
+//
+//- (void)drawBarInside:(NSRect)aRect flipped:(BOOL)flipped
+//{
+//    
+//}
+@end
+
+
+@interface JKSMoviePlayerSlider : NSSlider
+@end
+
+@implementation JKSMoviePlayerSlider
++ (Class)cellClass { return [JKSMoviePlayerSliderCell class]; }
+@end
+
 
 @implementation JKSMoviePlayerControllerView
 
@@ -19,14 +40,14 @@
     if ((self = [super initWithFrame:frame])) {
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setWantsLayer:YES];
-        [self layer].backgroundColor = [[[NSColor blackColor] colorWithAlphaComponent:0.7] CGColor];
+        [self layer].backgroundColor = [[NSColor blackColor] CGColor];
         [self layer].cornerRadius = 8;
 
         NSRect playPauseRect = NSMakeRect(0, 0, 18, 18);
         _playPauseButton = [self createButtonWithFrame:playPauseRect image:[self playImageWithSize:playPauseRect.size]];
         [self addSubview:_playPauseButton];
 
-        _timeSlider = [[NSSlider alloc] initWithFrame:NSMakeRect(0, 0, 235, 15)];
+        _timeSlider = [[JKSMoviePlayerSlider alloc] initWithFrame:NSMakeRect(0, 0, 235, 20)];
         [_timeSlider setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self addSubview:_timeSlider];
 
@@ -40,34 +61,10 @@
         [_timeLabel setStringValue:@"--:--"];
         [self addSubview:_timeLabel];
 
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_timeSlider
-                                                         attribute:NSLayoutAttributeCenterX
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeCenterX
-                                                        multiplier:1.0
-                                                          constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_timeSlider
-                                                         attribute:NSLayoutAttributeCenterY
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeCenterY
-                                                        multiplier:1.0
-                                                          constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_playPauseButton
-                                                         attribute:NSLayoutAttributeCenterY
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:_timeSlider
-                                                         attribute:NSLayoutAttributeCenterY
-                                                        multiplier:1.0
-                                                          constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_timeLabel
-                                                         attribute:NSLayoutAttributeCenterY
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:_timeSlider
-                                                         attribute:NSLayoutAttributeCenterY
-                                                        multiplier:1.0
-                                                          constant:0]];
+        [self addConstraintWithItem:_timeSlider toItem:self attribute:NSLayoutAttributeCenterX];
+        [self addConstraintWithItem:_timeSlider toItem:self attribute:NSLayoutAttributeCenterY];
+        [self addConstraintWithItem:_playPauseButton toItem:_timeSlider attribute:NSLayoutAttributeCenterY];
+        [self addConstraintWithItem:_timeLabel toItem:_timeSlider attribute:NSLayoutAttributeCenterY];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_playPauseButton(==18)]-[_timeSlider]-5-[_timeLabel]"
                                                                      options:0
                                                                      metrics:nil
@@ -90,20 +87,19 @@
 }
 
 
-//- (void)drawRect:(NSRect)dirtyRect
-//{
-//    [[NSGraphicsContext currentContext] saveGraphicsState];
-//
-//    [[[NSColor blackColor] colorWithAlphaComponent:0.7] setFill];
-//    [[NSGraphicsContext currentContext] setCompositingOperation:NSCompositeSourceOver];
-//    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:[self bounds] xRadius:8 yRadius:8];
-//    [path fill];
-//    
-//    [[NSGraphicsContext currentContext] restoreGraphicsState];
-//}
-
-
 #pragma mark - Private methods
+
+- (void)addConstraintWithItem:(id)view toItem:(id)otherView attribute:(NSLayoutAttribute)attribute
+{
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:view
+                                                     attribute:attribute
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:otherView
+                                                     attribute:attribute
+                                                    multiplier:1.0
+                                                      constant:0]];
+}
+
 
 - (NSButton *)createButtonWithFrame:(NSRect)frame image:(NSImage *)image
 {
