@@ -1,5 +1,7 @@
 JKSMoviePlayerController is a little controller for easily adding user-controlled playback of videos to AppKit based applications using the AVFoundation framework. It's inspired, in spirit, by MPMovieController found in the iOS SDK.
 
+![screenshot](https://raw.github.com/js/JKSMoviePlayerController/master/screenshot.png)
+
 How
 ----
 
