@@ -189,7 +189,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 
 - (void)mouseEntered:(NSEvent *)event
 {
-    [self fadeInControllerView];
+    [[_controllerView animator] setAlphaValue:1];
 }
 
 
@@ -234,7 +234,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 - (void)fadeOutContorllerViewDelayed
 {
     [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControllerView) object:nil];
-    [self performSelector:@selector(fadeOutControllerView) withObject:nil afterDelay:2];
+    [self performSelector:@selector(fadeOutControllerView) withObject:nil afterDelay:1.6];
 }
 
 
