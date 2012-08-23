@@ -272,7 +272,8 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 		// Create an AVPlayerLayer and add it to the player view if there is video, but hide it until it's ready for display
 		_playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
 		_playerLayer.frame = [[_view layer] bounds];
-		_playerLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+        _playerLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+        _playerLayer.videoGravity =  AVLayerVideoGravityResizeAspectFill;
 		_playerLayer.hidden = YES;
 		//[[_view layer] addSublayer:_playerLayer];
         [[_view layer] insertSublayer:_playerLayer below:[_controllerView layer]];
