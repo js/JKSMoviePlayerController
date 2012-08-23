@@ -23,6 +23,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 @property (strong) AVPlayer *player;
 @property (strong) AVPlayerLayer *playerLayer;
 @property (strong) JKSMoviePlayerControllerView *controllerView;
+@property (strong) NSTimer *timer;
 @end
 
 @implementation JKSMoviePlayerController
@@ -55,8 +56,15 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
                                                           attribute:NSLayoutAttributeCenterY
                                                          multiplier:1.0
                                                            constant:0]];
-
         [_view layer].backgroundColor = [[NSColor blackColor] CGColor];
+        NSTrackingArea *tracker = [[NSTrackingArea alloc] initWithRect:[_view bounds]
+                                                               options:(NSTrackingActiveInKeyWindow |
+                                                                        NSTrackingMouseEnteredAndExited |
+                                                                        NSTrackingInVisibleRect)
+                                                                 owner:self
+                                                              userInfo:nil];
+        [_view addTrackingArea:tracker];
+
         _player = [[AVPlayer alloc] init];
         _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
         [self addObserver:self
@@ -83,6 +91,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
         
         _controllerView = [[JKSMoviePlayerControllerView alloc] initWithFrame:NSMakeRect(0, 0, 440, 40)];
         [_view addSubview:_controllerView];
+        [_controllerView setAlphaValue:0];
         [_view addConstraint:[NSLayoutConstraint constraintWithItem:_controllerView
                                                           attribute:NSLayoutAttributeCenterX
                                                           relatedBy:NSLayoutRelationEqual
@@ -137,6 +146,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 				break;
 		}
 		
+        [self fadeInControllerView];
         [_controllerView.playPauseButton setEnabled:enable];
         [_controllerView.timeSlider setEnabled:enable];
         if (enable) {
@@ -163,6 +173,20 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 }
 
 
+#pragma mark - Event handling
+
+- (void)mouseEntered:(NSEvent *)event
+{
+    [self fadeInControllerView];
+}
+
+
+- (void)mouseExited:(NSEvent *)event
+{
+    [self fadeOutContorllerViewDelayed];
+}
+
+
 #pragma mark - Control actions
 
 
@@ -186,6 +210,27 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 
 
 #pragma mark - Private methods
+
+- (void)fadeInControllerView
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControllerView) object:nil];
+    [[_controllerView animator] setAlphaValue:1];
+    [self fadeOutContorllerViewDelayed];
+}
+
+
+- (void)fadeOutContorllerViewDelayed
+{
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOutControllerView) object:nil];
+    [self performSelector:@selector(fadeOutControllerView) withObject:nil afterDelay:2];
+}
+
+
+- (void)fadeOutControllerView
+{
+    [[_controllerView animator] setAlphaValue:0];
+}
+
 
 - (void)setUpPlaybackOfAsset:(AVAsset *)asset withKeys:(NSArray *)keys
 {
