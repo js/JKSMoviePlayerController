@@ -16,4 +16,7 @@
 @property (nonatomic, assign) double currentTime;
 
 - (instancetype)initWithContentURL:(NSURL *)fileURL;
+
+- (void)play;
+- (void)pause;
 @end

@@ -173,6 +173,18 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 }
 
 
+- (void)play
+{
+    [self.player play];
+}
+
+
+- (void)pause
+{
+    [self.player pause];
+}
+
+
 #pragma mark - Event handling
 
 - (void)mouseEntered:(NSEvent *)event
