@@ -44,6 +44,7 @@
     [self.movieController.view removeFromSuperview];
 
     self.movieController = [[JKSMoviePlayerController alloc] initWithContentURL:url];
+    self.movieController.scalingMode = JKSMoviePlayerScalingResizeAspectFill;
     NSView *movieView = self.movieController.view;
     [self.movieContainerView addSubview:movieView];
     [self.movieContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[movieView(>=440)]|"

@@ -35,6 +35,8 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 {
     if ((self = [super init])) {
         _contentURL = [fileURL copy];
+        _scalingMode = JKSMoviePlayerScalingResizeAspect;
+
         _view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 640, 480)];
         [_view setWantsLayer:YES];
         _spinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
@@ -197,6 +199,13 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 }
 
 
+- (void)setScalingMode:(JKSMoviePlayerScalingMode)scalingMode
+{
+    _scalingMode = scalingMode;
+    [self updateScalingMode];
+}
+
+
 - (void)play
 {
     [self.player play];
@@ -297,7 +306,6 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 		_playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
 		_playerLayer.frame = [[_view layer] bounds];
         _playerLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-        _playerLayer.videoGravity =  AVLayerVideoGravityResizeAspectFill;
 		_playerLayer.hidden = YES;
 		//[[_view layer] addSublayer:_playerLayer];
         [[_view layer] insertSublayer:_playerLayer below:[_controllerView layer]];
@@ -321,6 +329,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
                                                               [_controllerView.timeSlider setDoubleValue:CMTimeGetSeconds(time)];
                                                               [weakSelf updateTimeLabel];
                                                           }];
+    [self updateScalingMode];
 }
 
 
@@ -347,6 +356,24 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
         NSLog(@"%@: %@", NSStringFromSelector(_cmd), error);
         // TODO: Notify delegate
 	}
+}
+
+
+- (void)updateScalingMode
+{
+    switch (_scalingMode) {
+        case JKSMoviePlayerScalingResizeAspect:
+            _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+            break;
+        case JKSMoviePlayerScalingResizeAspectFill:
+            _playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            break;
+        case JKSMoviePlayerScalingResize:
+            _playerLayer.videoGravity = AVLayerVideoGravityResize;
+            break;
+        default:
+            break;
+    }
 }
 
 @end

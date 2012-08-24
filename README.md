@@ -26,7 +26,6 @@ Things to do
 * TODO JKSMoviePlayerController should expose more controller functionality (start/stop playback programmatically etc)
 * TODO Hook up the controls in the controller view to the responder chain
 * TODO Build it as a `.framework`
-* TODO Expose API for changing the scaling mode of the AVPlayerLayer
 * TODO Less zealous showing and hiding of the controller view when entering/exiting the tracking area
 
 License
