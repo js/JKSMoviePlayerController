@@ -10,12 +10,17 @@ Add the files in JKSMoviePlayerController/* to your Xcode project along with the
     JKSMoviePlayerController *movieController = [[JKSMoviePlayerController alloc] initWithContentURL:movieURL];
 	[self.movieContainerView addSubview:movieController.view];
 
+Where
+-----
+
+JKSMoviePlayerController requires Mac OSX 10.8+ Mountain Lion. Primarily because it uses the wonderful +[NSImage imageWithSize:flipped:drawingHandler:]. Adding support for 10.7 should be fairly straightforward though.
+
 Why
 ----
 
 QTKit and its QTMovieView is the de facto way of adding video playback to Cocoa apps. However it has two major issues on Mountain Lion
 
-1. Its playback controller view doesn't seem to want to play at all together with Auto Layout. `<rdar://...>`
+1. Its playback controller view doesn't seem to want to play at all together with Auto Layout. `<rdar://12167052>`
 2. Its playback controller view looks extremely dull and, well, aged.
 3. QTKit feels like one of those frameworks that will eventually be slashed (authors subjective opinion)
 
