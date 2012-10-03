@@ -125,6 +125,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObserver:self forKeyPath:@"player.rate"];
     [self removeObserver:self forKeyPath:@"player.currentItem.status"];
     [_player removeTimeObserver:self.timeObserverToken];
@@ -331,8 +332,13 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 	// Create a new AVPlayerItem and make it our player's current item.
 	AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:asset];
 	[_player replaceCurrentItemWithPlayerItem:playerItem];
-	
     __weak JKSMoviePlayerController *weakSelf = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification
+                                                      object:playerItem
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [[weakSelf.controllerView animator] setAlphaValue:1];
+                                                  }];
 	_timeObserverToken = [_player addPeriodicTimeObserverForInterval:CMTimeMake(1, 10)
                                                                queue:dispatch_get_main_queue()
                                                           usingBlock:^(CMTime time) {
