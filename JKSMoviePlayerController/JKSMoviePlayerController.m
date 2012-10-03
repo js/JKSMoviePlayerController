@@ -257,6 +257,9 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 
 - (void)scrubberChanged:(NSSlider *)sender
 {
+    if ([self.player rate] >= 1.0f) {
+        [self.player pause];
+    }
     [self.player seekToTime:CMTimeMakeWithSeconds([sender doubleValue], NSEC_PER_SEC)];
 }
 
@@ -333,7 +336,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 	_timeObserverToken = [_player addPeriodicTimeObserverForInterval:CMTimeMake(1, 10)
                                                                queue:dispatch_get_main_queue()
                                                           usingBlock:^(CMTime time) {
-                                                              [_controllerView.timeSlider setDoubleValue:CMTimeGetSeconds(time)];
+                                                              [weakSelf.controllerView.timeSlider setDoubleValue:CMTimeGetSeconds(time)];
                                                               [weakSelf updateTimeLabel];
                                                           }];
     [self updateScalingMode];
