@@ -62,6 +62,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
         NSTrackingArea *tracker = [[NSTrackingArea alloc] initWithRect:[_view bounds]
                                                                options:(NSTrackingActiveInKeyWindow |
                                                                         NSTrackingMouseEnteredAndExited |
+                                                                        NSTrackingMouseMoved |
                                                                         NSTrackingInVisibleRect)
                                                                  owner:self
                                                               userInfo:nil];
@@ -232,8 +233,14 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 }
 
 
-#pragma mark - Control actions
+- (void)mouseMoved:(NSEvent *)event
+{
+    [self fadeInControllerView];
+    [self fadeOutContorllerViewDelayed];
+}
 
+
+#pragma mark - Control actions
 
 - (void)playPauseToggle:(id)sender
 {
