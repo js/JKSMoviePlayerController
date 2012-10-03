@@ -28,10 +28,8 @@ Things to do
 ----
 
 * TODO A nicer playback controller view, with rewind/fast-forward and volume controls. Should probably look even more like the one on Quicktime X so users will recognize it quicker
-* TODO JKSMoviePlayerController should expose more controller functionality (start/stop playback programmatically etc)
 * TODO Hook up the controls in the controller view to the responder chain
 * TODO Build it as a `.framework`
-* TODO Less zealous showing and hiding of the controller view when entering/exiting the tracking area
 
 License
 -------
