@@ -12,16 +12,40 @@
 @end
 
 @implementation JKSMoviePlayerSliderCell
-// TODO:
-//- (void)drawKnob:(NSRect)knobRect
-//{
-//    
-//}
-//
-//- (void)drawBarInside:(NSRect)aRect flipped:(BOOL)flipped
-//{
-//    
-//}
+- (void)drawKnob:(NSRect)knobRect
+{
+    knobRect.origin.x += 6;
+    knobRect.origin.y += 8;
+    knobRect.size.height = 7;
+    knobRect.size.width = 7;
+
+    NSBezierPath *knobPath = [NSBezierPath bezierPathWithOvalInRect:knobRect];
+    [[NSColor whiteColor] set];
+    [knobPath fill];
+}
+
+
+- (void)drawBarInside:(NSRect)aRect flipped:(BOOL)flipped
+{
+    NSRect sliderRect = aRect;
+    sliderRect.origin.y += (NSMaxY(sliderRect) / 2) - 4;
+    sliderRect.origin.x += 4;
+    sliderRect.size.width -= 10;
+    sliderRect.size.height = 11;
+
+    NSBezierPath *barPath = [NSBezierPath bezierPathWithRoundedRect:sliderRect xRadius:4 yRadius:4];
+    [barPath setLineWidth:1.5f];
+
+    [[NSGraphicsContext currentContext] saveGraphicsState];
+    [[NSColor blackColor] set];
+    NSRectFill(aRect);
+    [barPath fill];
+    [[NSGraphicsContext currentContext] restoreGraphicsState];
+
+    [[NSColor whiteColor] setStroke];
+    [[NSColor colorWithDeviceWhite:0.5f alpha:1.0f] set];
+    [barPath stroke];
+}
 @end
 
 

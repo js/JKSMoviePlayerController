@@ -127,8 +127,8 @@
 			children = (
 				04B9A9C715E6554400AC6E40 /* JKSMoviePlayerController.h */,
 				04B9A9C815E6554400AC6E40 /* JKSMoviePlayerController.m */,
-				04B9A9C915E6554400AC6E40 /* JKSMoviePlayerControllerView.m */,
 				04B9A9CA15E6554400AC6E40 /* JKSMoviePlayerControllerView.h */,
+				04B9A9C915E6554400AC6E40 /* JKSMoviePlayerControllerView.m */,
 			);
 			name = JKSMoviePlayerController;
 			sourceTree = "<group>";
