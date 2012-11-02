@@ -39,6 +39,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 
         _view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 640, 480)];
         [_view setWantsLayer:YES];
+        [_view setTranslatesAutoresizingMaskIntoConstraints:NO];
         _spinner = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
         [_spinner setTranslatesAutoresizingMaskIntoConstraints:NO];
         [_spinner setStyle:NSProgressIndicatorSpinningStyle];
@@ -102,11 +103,11 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
                                                           attribute:NSLayoutAttributeCenterX
                                                          multiplier:1.0
                                                            constant:0]];
-        [_view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_controllerView(==440)]"
+        [_view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(>=20)-[_controllerView(==440)]-(>=29)-|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:NSDictionaryOfVariableBindings(_controllerView)]];
-        [_view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_controllerView(==40)]-40-|"
+        [_view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=40)-[_controllerView(==40)]-40-|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:NSDictionaryOfVariableBindings(_controllerView)]];
