@@ -20,6 +20,8 @@ typedef NS_ENUM(NSUInteger, JKSMoviePlayerScalingMode) {
 @property (nonatomic, assign) JKSMoviePlayerScalingMode scalingMode;
 @property (nonatomic, readonly) Float64 duration;
 @property (nonatomic, assign) Float64 currentTime;
+@property (assign, readonly, getter=isPlayable) BOOL playable;
+@property (nonatomic, strong) NSTextField *unplayableLabel;
 
 - (instancetype)initWithContentURL:(NSURL *)fileURL;
 

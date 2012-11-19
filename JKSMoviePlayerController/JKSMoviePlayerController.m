@@ -24,6 +24,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 @property (strong) AVPlayerLayer *playerLayer;
 @property (strong) JKSMoviePlayerControllerView *controllerView;
 @property (strong) NSTimer *timer;
+@property (assign, readwrite, getter=isPlayable) BOOL playable;
 @end
 
 @implementation JKSMoviePlayerController
@@ -36,6 +37,7 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
     if ((self = [super init])) {
         _contentURL = [fileURL copy];
         _scalingMode = JKSMoviePlayerScalingResizeAspect;
+        _playable = NO;
 
         _view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 640, 480)];
         [_view setWantsLayer:YES];
@@ -45,20 +47,23 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
         [_spinner setStyle:NSProgressIndicatorSpinningStyle];
         [_spinner startAnimation:self];
         [_view addSubview:_spinner];
-        [_view addConstraint:[NSLayoutConstraint constraintWithItem:_spinner
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:_view
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
-                                                           constant:0]];
-        [_view addConstraint:[NSLayoutConstraint constraintWithItem:_spinner
-                                                          attribute:NSLayoutAttributeCenterY
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:_view
-                                                          attribute:NSLayoutAttributeCenterY
-                                                         multiplier:1.0
-                                                           constant:0]];
+        [self constrainItem:_spinner toCenterOfItem:_view];
+
+        _unplayableLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 150, 25)];
+        [_unplayableLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [_unplayableLabel setTextColor:[NSColor whiteColor]];
+        [_unplayableLabel setBackgroundColor:[NSColor blackColor]];
+        [_unplayableLabel setStringValue:@"Preview unavailable"];
+        [_unplayableLabel setAlignment:NSCenterTextAlignment];
+        [_unplayableLabel setBordered:NO];
+        [_view addSubview:_unplayableLabel];
+        [_view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[_unplayableLabel(==150)]"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:NSDictionaryOfVariableBindings(_unplayableLabel)]];
+        [self constrainItem:_unplayableLabel toCenterOfItem:_view];
+        [_unplayableLabel setHidden:YES];
+
         [_view layer].backgroundColor = [[NSColor blackColor] CGColor];
         NSTrackingArea *tracker = [[NSTrackingArea alloc] initWithRect:[_view bounds]
                                                                options:(NSTrackingActiveInKeyWindow |
@@ -306,11 +311,14 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
 	if (![asset isPlayable] || [asset hasProtectedContent]) {
 		// We can't play this asset. Show the "Unplayable Asset" label.
 		[self stopLoadingAnimationAndHandleError:nil];
-        // TODO: notify delegate
+        self.playable = NO;
+        [_unplayableLabel setHidden:NO];
         NSLog(@"can't play this. playable=%d protected=%d", [asset isPlayable], [asset hasProtectedContent]);
 		return;
 	}
-	
+
+    self.playable = YES;
+
 	// We can play this asset.
 	// Set up an AVPlayerLayer according to whether the asset contains video.
 	if ([[asset tracksWithMediaType:AVMediaTypeVideo] count] != 0) {
@@ -391,6 +399,25 @@ static void *JKSMoviePlayerPlayerLayerReadyForDisplay = &JKSMoviePlayerPlayerLay
         default:
             break;
     }
+}
+
+
+- (void)constrainItem:(id)item toCenterOfItem:(id)containerItem
+{
+    [containerItem addConstraint:[NSLayoutConstraint constraintWithItem:item
+                                                              attribute:NSLayoutAttributeCenterX
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:containerItem
+                                                              attribute:NSLayoutAttributeCenterX
+                                                             multiplier:1.0
+                                                               constant:0]];
+    [containerItem addConstraint:[NSLayoutConstraint constraintWithItem:item
+                                                              attribute:NSLayoutAttributeCenterY
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:containerItem
+                                                              attribute:NSLayoutAttributeCenterY
+                                                             multiplier:1.0
+                                                               constant:0]];
 }
 
 @end
