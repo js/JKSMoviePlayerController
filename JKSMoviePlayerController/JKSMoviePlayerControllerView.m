@@ -8,20 +8,34 @@
 
 #import "JKSMoviePlayerControllerView.h"
 
+#ifndef NSCOLOR
+#define NSCOLOR(r, g, b, a) [NSColor colorWithCalibratedRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
+#endif
+
 @interface JKSMoviePlayerSliderCell : NSSliderCell
 @end
 
 @implementation JKSMoviePlayerSliderCell
+
+- (NSRect)knobRectFlipped:(BOOL)flipped
+{
+    NSRect knobRect = [super knobRectFlipped:flipped];
+    knobRect.origin.x += 6;
+    knobRect.origin.y += 7.5;
+    knobRect.size.height = 8;
+    knobRect.size.width = 8;
+    return knobRect;
+}
+
+
 - (void)drawKnob:(NSRect)knobRect
 {
-    knobRect.origin.x += 6;
-    knobRect.origin.y += 8;
-    knobRect.size.height = 7;
-    knobRect.size.width = 7;
-
-    NSBezierPath *knobPath = [NSBezierPath bezierPathWithOvalInRect:knobRect];
-    [[NSColor whiteColor] set];
-    [knobPath fill];
+    NSBezierPath *outerPath = [NSBezierPath bezierPathWithOvalInRect:knobRect];
+    NSGradient *outerGradient = [[NSGradient alloc] initWithColors:@[NSCOLOR(193, 193, 193, 1), NSCOLOR(120, 120, 120, 1)]];
+    [outerGradient drawInBezierPath:outerPath angle:90];
+    NSBezierPath *innerPath = [NSBezierPath bezierPathWithOvalInRect:NSInsetRect(knobRect, 2, 2)];
+    NSGradient *innerGradient = [[NSGradient alloc] initWithColors:@[NSCOLOR(154, 154, 154, 1), NSCOLOR(127, 127, 127, 1)]];
+    [innerGradient drawInBezierPath:innerPath angle:90];
 }
 
 
@@ -29,23 +43,19 @@
 {
     NSRect sliderRect = aRect;
     sliderRect.origin.y += (NSMaxY(sliderRect) / 2) - 4;
-    sliderRect.origin.x += 4;
-    sliderRect.size.width -= 10;
+    sliderRect.origin.x += 2;
+    sliderRect.size.width -= 4;
     sliderRect.size.height = 11;
 
     NSBezierPath *barPath = [NSBezierPath bezierPathWithRoundedRect:sliderRect xRadius:4 yRadius:4];
-    [barPath setLineWidth:1.5f];
-
-    [[NSGraphicsContext currentContext] saveGraphicsState];
-    [[NSColor blackColor] set];
-    NSRectFill(aRect);
-    [barPath fill];
-    [[NSGraphicsContext currentContext] restoreGraphicsState];
-
-    [[NSColor whiteColor] setStroke];
-    [[NSColor colorWithDeviceWhite:0.5f alpha:1.0f] set];
-    [barPath stroke];
+    NSGradient *borderGradient = [[NSGradient alloc] initWithColors:@[NSCOLOR(3, 3, 3, 1), NSCOLOR(23, 23, 23, 1)]];
+    [borderGradient drawInBezierPath:barPath angle:90];
+    NSBezierPath *innerPath = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(sliderRect, 1, 1) xRadius:4 yRadius:4];
+    [NSCOLOR(13, 13, 13, 1) setFill];
+    [innerPath fill];
 }
+
+
 @end
 
 
@@ -64,8 +74,6 @@
     if ((self = [super initWithFrame:frame])) {
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setWantsLayer:YES];
-        [self layer].backgroundColor = [[NSColor blackColor] CGColor];
-        [self layer].cornerRadius = 8;
 
         NSRect playPauseRect = NSMakeRect(0, 0, 18, 18);
         _playPauseButton = [self createButtonWithFrame:playPauseRect image:[self playImageWithSize:playPauseRect.size]];
@@ -96,6 +104,29 @@
     }
 
     return self;
+}
+
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+    NSBezierPath *outerBorder = [NSBezierPath bezierPathWithRoundedRect:[self bounds] xRadius:5 yRadius:5];
+    NSGradient *borderGradient = [[NSGradient alloc] initWithColors:@[NSCOLOR(26, 26, 26, 1), NSCOLOR(86, 86, 86, 1)]];
+    [borderGradient drawInBezierPath:outerBorder angle:90];
+
+    NSRect innerRect = [self bounds];
+    innerRect.origin.y -= 1;
+    innerRect.size.height -= 1;
+    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:innerRect xRadius:5 yRadius:5];
+    NSGradient *backgroundGradient = [[NSGradient alloc] initWithColorsAndLocations:
+                                      NSCOLOR(56, 56, 56, 1), 0.0,
+                                      NSCOLOR(39, 39, 39, 1), 0.46,
+                                      NSCOLOR(23, 23, 23, 1), 0.47,
+                                      NSCOLOR(13, 13, 13, 1), 1.0,
+                                      nil];
+    [backgroundGradient drawInBezierPath:path angle:-90];
+
+    [NSCOLOR(0, 0, 0, 1) setStroke];
+    [outerBorder stroke];
 }
 
 
