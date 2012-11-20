@@ -83,7 +83,7 @@
         [_timeSlider setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self addSubview:_timeSlider];
 
-        _timeLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 35, 15)];
+        _timeLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 35, 16)];
         [_timeLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [_timeLabel setBezeled:NO];
         [_timeLabel setDrawsBackground:NO];
@@ -110,17 +110,15 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     NSBezierPath *outerBorder = [NSBezierPath bezierPathWithRoundedRect:[self bounds] xRadius:5 yRadius:5];
-    NSGradient *borderGradient = [[NSGradient alloc] initWithColors:@[NSCOLOR(26, 26, 26, 1), NSCOLOR(86, 86, 86, 1)]];
+    NSGradient *borderGradient = [[NSGradient alloc] initWithColors:@[NSCOLOR(20, 20, 20, 1), NSCOLOR(86, 86, 86, 1)]];
     [borderGradient drawInBezierPath:outerBorder angle:90];
 
-    NSRect innerRect = [self bounds];
-    innerRect.origin.y -= 1;
-    innerRect.size.height -= 1;
+    NSRect innerRect = NSInsetRect([self bounds], 0, 2);
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:innerRect xRadius:5 yRadius:5];
     NSGradient *backgroundGradient = [[NSGradient alloc] initWithColorsAndLocations:
                                       NSCOLOR(56, 56, 56, 1), 0.0,
-                                      NSCOLOR(39, 39, 39, 1), 0.46,
-                                      NSCOLOR(23, 23, 23, 1), 0.47,
+                                      NSCOLOR(39, 39, 39, 1), 0.5,
+                                      NSCOLOR(23, 23, 23, 1), 0.51,
                                       NSCOLOR(13, 13, 13, 1), 1.0,
                                       nil];
     [backgroundGradient drawInBezierPath:path angle:-90];
