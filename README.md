@@ -27,7 +27,6 @@ QTKit and its QTMovieView is the de facto way of adding video playback to Cocoa 
 Things to do
 ----
 
-* TODO A nicer playback controller view, with rewind/fast-forward and volume controls. Should probably look even more like the one on Quicktime X so users will recognize it quicker
 * TODO Hook up the controls in the controller view to the responder chain
 * TODO Build it as a `.framework`
 
