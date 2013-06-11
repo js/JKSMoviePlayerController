@@ -8,7 +8,6 @@
 
 #import "JKSMoviePlayerController.h"
 #import <QuartzCore/QuartzCore.h>
-#import <AVFoundation/AVFoundation.h>
 #import "JKSMoviePlayerControllerView.h"
 
 /* Partially based on the AVSimplePlayer sample from Apple */
